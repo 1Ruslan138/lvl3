@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Message</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+    <style>
+        #app {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #notification-input {
+            padding: 10px;
+        }
+
+        #notification-button {
+            background-color: green;
+            color: white;
+            padding: 10px 20px;
+        }
+
+        .notification {
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 20 px;
+        }
+        
+        .success {
+            background-color: rgb(26, 197, 26);
+            color: white;
+        }
+
+        #delete {
+            background: red;
+            color: white;
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="app">
+        <input type="text" id="notification-input" v-model="notificationMessage" placeholder="Введите сообщение">
+        <button id="notification-button" @click="showNotification = true">Показать уведомление</button>
+        <notification-message :message="notificationMessage" variant="success"
+            v-if="showNotification"></notification-message>
+    </div>
+
+    <script>
+        Vue.component('notification-message', {
+            props: {
+                message: {
+                    type: String,
+                    required: true
+                },
+                variant: {
+                    type: String,
+                    default: 'info'
+                }
+            },
+            data() {
+                return {
+                    show: true
+                };
+            },
+            methods: {
+                dismiss() {
+                    this.show = false;
+                }
+            },
+            template: `
+        <div v-if="show" :class="['notification', variant]">
+          <span>{{ message }}</span>
+          <button id="delete" @click="dismiss">Удалить</button>
+        </div>
+      `
+        });
+
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    showNotification: false,
+                    notificationMessage: ''
+                };
+            }
+        });
+    </script>
+
+</body>
+
+</html>
